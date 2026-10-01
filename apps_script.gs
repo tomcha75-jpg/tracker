@@ -93,7 +93,8 @@ function submitEntry(data) {
     data.duration,  // C: Duration
     data.unit,      // D: Unit
     data.name,      // E: Added By
-    ''              // F: Edit History
+    '',             // F: Edit History
+    data.notes || '' // G: Notes
   ]);
 
   // Sort by date (col A) then time (col B), keeping header in place
