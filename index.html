@@ -55,6 +55,8 @@
     #modal-body code { display: block; background: #f5f5f5; padding: 10px; border-radius: 6px; font-size: 13px; margin-top: 8px; white-space: pre-wrap; }
     .modal-actions { display: flex; gap: 10px; }
     .modal-actions .btn { margin: 0; flex: 1; padding: 12px; }
+    textarea#field-notes { width: 100%; padding: 12px 14px; font-size: 16px; border: 1px solid #ddd; border-radius: 8px; background: white; outline: none; resize: vertical; min-height: 80px; font-family: inherit; }
+    textarea#field-notes:focus { border-color: #1a1a2e; }
     .hidden { display: none !important; }
   </style>
 </head>
@@ -96,6 +98,10 @@
           <button id="unit-min" onclick="setUnit('min')">Min</button>
         </div>
       </div>
+    </div>
+    <div class="field">
+      <label>Notes</label>
+      <textarea id="field-notes" placeholder="Optional notes..."></textarea>
     </div>
     <button class="btn btn-primary" id="submit-btn" onclick="handleSubmit()">Submit Entry</button>
     <button class="btn btn-secondary" onclick="openSheet()">Open Sheet in Browser</button>
@@ -252,6 +258,7 @@ async function doSubmit(data) {
   if (!result.success) throw new Error(result.error || 'Submit failed');
   setStatus('Entry saved.', true);
   document.getElementById('field-duration').value = '';
+  document.getElementById('field-notes').value = '';
 }
 
 function getFormData() {
@@ -261,7 +268,8 @@ function getFormData() {
   if (!date) { document.getElementById('date-text').classList.add('error'); alert('Please enter a valid date in MM/DD/YYYY format.'); return null; }
   if (!time) { alert('Please enter a time.'); return null; }
   if (!duration || isNaN(duration) || parseFloat(duration) <= 0) { alert('Please enter a valid duration.'); return null; }
-  return { date, time, duration, unit: currentUnit };
+  const notes = document.getElementById('field-notes').value.trim();
+  return { date, time, duration, unit: currentUnit, notes };
 }
 
 function showConflictModal(conflicts) {
