@@ -137,12 +137,15 @@ window.addEventListener('load', () => {
 });
 
 let timeEdited = false;
+let dateEdited = false;
 document.getElementById('field-time').addEventListener('input', () => { timeEdited = true; });
+document.getElementById('date-text').addEventListener('input', () => { dateEdited = true; });
+document.getElementById('date-picker-native').addEventListener('change', () => { dateEdited = true; });
 
 function refreshNow() {
-  if (document.visibilityState !== 'visible' || timeEdited) return;
-  setDateToToday();
-  setTimeToNow();
+  if (document.visibilityState !== 'visible') return;
+  if (!dateEdited) setDateToToday();
+  if (!timeEdited) setTimeToNow();
 }
 document.addEventListener('visibilitychange', refreshNow);
 window.addEventListener('pageshow', refreshNow);
@@ -273,6 +276,7 @@ async function doSubmit(data) {
   document.getElementById('field-duration').value = '';
   document.getElementById('field-notes').value = '';
   timeEdited = false;
+  dateEdited = false;
 }
 
 function getFormData() {
