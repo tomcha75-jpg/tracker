@@ -136,6 +136,13 @@ window.addEventListener('load', () => {
   wireUpNativePicker();
 });
 
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') {
+    setDateToToday();
+    setTimeToNow();
+  }
+});
+
 function showApp(name) {
   document.getElementById('setup-screen').classList.add('hidden');
   document.getElementById('app-screen').classList.remove('hidden');
