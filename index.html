@@ -87,7 +87,7 @@
     </div>
     <div class="field">
       <label>Time</label>
-      <input type="time" id="field-time">
+      <input type="time" id="field-time" autocomplete="off">
     </div>
     <div class="field">
       <label>Duration</label>
@@ -136,12 +136,18 @@ window.addEventListener('load', () => {
   wireUpNativePicker();
 });
 
-document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'visible') {
-    setDateToToday();
-    setTimeToNow();
-  }
-});
+let timeEdited = false;
+document.getElementById('field-time').addEventListener('input', () => { timeEdited = true; });
+
+function refreshNow() {
+  if (document.visibilityState !== 'visible' || timeEdited) return;
+  setDateToToday();
+  setTimeToNow();
+}
+document.addEventListener('visibilitychange', refreshNow);
+window.addEventListener('pageshow', refreshNow);
+window.addEventListener('focus', refreshNow);
+setInterval(refreshNow, 1000);
 
 function showApp(name) {
   document.getElementById('setup-screen').classList.add('hidden');
@@ -266,6 +272,7 @@ async function doSubmit(data) {
   setStatus('Entry saved.', true);
   document.getElementById('field-duration').value = '';
   document.getElementById('field-notes').value = '';
+  timeEdited = false;
 }
 
 function getFormData() {
